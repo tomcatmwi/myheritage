@@ -4,7 +4,6 @@ var jimp = require('jimp');
 const picdir = './picdir/';
 const tempdir = './temp/';
 const outdir = './output/';
-const downloaddir = './download/';
 
 const error = (message) => {
     console.error(message);
@@ -17,9 +16,9 @@ const mkdir = async (dirname) => {
     if (!fs.existsSync(dirname))
         await fs.mkdir(dirname, err => { if (err) error(`Can't create ${dirname}`) });
 }
+mkdir(picdir);
 mkdir(tempdir);
 mkdir(outdir);
-mkdir(downloaddir);
 
 //  get list of image files
 
@@ -32,7 +31,11 @@ fs.readdirSync(picdir).forEach(file => {
     }
 });
 
-//filelist.length = 3;
+if (filelist.length === 0) {
+  console.log(`No files to process!`);
+  process.abort();
+}
+
 console.log(`Please wait... Processing ${filelist.length} files...`);
 
 //  create resizer
